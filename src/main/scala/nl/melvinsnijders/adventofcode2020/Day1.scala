@@ -1,4 +1,4 @@
-package nl.melvinsnijders.adventofcode2020.day1
+package nl.melvinsnijders.adventofcode2020
 
 import scala.io.Source
 

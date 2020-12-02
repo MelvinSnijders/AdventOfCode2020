@@ -5,40 +5,38 @@ import scala.io.Source
 object Day2 {
 
     val input: Array[String] = Source.fromResource("day02.txt").getLines().toArray
+    val policies: Array[PasswordPolicy] = input.map(line => {
+        val policy = line.split(" ")
+        val minMax = policy(0).split("-")
+        PasswordPolicy(minMax(0).toInt, minMax(1).toInt, policy(1).charAt(0), policy(2))
+    })
 
     def main(args: Array[String]): Unit = {
 
-        var matchesPart1 = 0
-        var matchesPart2 = 0
-
-        for(line <- input) {
-
-            val splitted: Array[String] = line.split(" ")
-            val minMax = splitted(0).split("-")
-
-            val num1: Int = minMax(0).toInt
-            val num2: Int = minMax(1).toInt
-            val character: Char = splitted(1).charAt(0)
-            val password = splitted(2)
-
-            val count: Int = password.count(_ == character)
-
-            if(count >= num1 && count <= num2) {
-                matchesPart1 += 1
-            }
-
-            val firstChar = password.charAt(num1 - 1)
-            val secondChar = password.charAt(num2 - 1)
-
-            if(firstChar != secondChar && (firstChar == character || secondChar == character)) {
-                matchesPart2 += 1
-            }
-
-        }
-
-        println(s"Part 1: $matchesPart1")
-        println(s"Part 2: $matchesPart2")
+        println("Part 1: " + partOne())
+        println("Part 1: " + partTwo())
 
     }
+
+    def partOne(): Int = {
+
+        policies.count(policy => {
+            val count = policy.password.count(_ == policy.character)
+            count >= policy.num1 && count <= policy.num2
+        })
+
+    }
+
+    def partTwo(): Int = {
+
+        policies.count(policy => {
+            val char1 = policy.password.charAt(policy.num1 - 1);
+            val char2 = policy.password.charAt(policy.num2 - 1)
+            char1 != char2 && (char1 == policy.character || char2 == policy.character)
+        })
+
+    }
+
+    case class PasswordPolicy(num1: Int, num2: Int, character: Char, password: String)
 
 }
